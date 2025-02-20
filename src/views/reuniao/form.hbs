@@ -4,14 +4,14 @@
    <div class="card-body px-4 py-3">
       <div class="row align-items-center">
          <div class="col-9">
-            <h4 class="fw-semibold mb-8">Novo Setor</h4>
+            <h4 class="fw-semibold mb-8">Nova Reunião</h4>
             <nav aria-label="breadcrumb">
                <ol class="breadcrumb">
                   <li class="breadcrumb-item">
                      <a class="text-muted text-decoration-none" href="/">Home</a>
                   </li>
                   <li class="breadcrumb-item" aria-current="page">
-                     <a class="text-muted text-decoration-none" href="/setores">Setores</a>
+                     <a class="text-muted text-decoration-none" href="/reunioes">Reuniões</a>
                   </li>
                </ol>
             </nav>
@@ -26,10 +26,10 @@
 </div>
 <div class="row">
    <div class="col-12">
-      <form action="{{#if setor}}/setores/{{setor.id}}/atualizacao{{else}}/setores/novo{{/if}}" method="post">
+      <form action="/reunioes/novo" method="post">
          <div class="card">
             <div class="px-4 py-3 border-bottom">
-               <h4 class="card-title mb-0">Cadastro de Setor</h4>
+               <h4 class="card-title mb-0">Cadastro de Nova Reunião</h4>
             </div>
             
             <div class="card-body p-4 border-bottom">
@@ -44,16 +44,45 @@
                     </div> 
                 {{/if}}
 
-               <h5 class="fs-4 fw-semibold mb-4">Informações do Setor</h5>
+               <h5 class="fs-4 fw-semibold mb-4">Informações da Reunião</h5>
                <div class="row">
                   <div class="col-lg-6">
                      <div class="mb-4">
-                        <label class="form-label">Nome do Setor</label>
+                        <label class="form-label">Título</label>
                         <div class="input-group">
                            <span class="input-group-text px-6" id="basic-addon1">
-                           <i class="ti ti-building fs-6"></i>
+                           <i class="ti ti-book fs-6"></i>
                            </span>
-                           <input type="text" class="form-control ps-2" name="nome" value="{{#if setor}}{{setor.nome}}{{else}}{{old.nome}}{{/if}}" placeholder="Informe o nome do setor">
+                           <input type="text" class="form-control ps-2" name="titulo" value="{{ old.titulo }}" placeholder="Informe o título da reunião">
+                        </div>
+                     </div>
+                     <div>
+                        <label class="form-label">Descrição</label>
+                        <div class="input-group">
+                           <span class="input-group-text px-6" id="basic-addon1">
+                           <i class="ti ti-notes fs-6"></i>
+                           </span>
+                           <textarea class="form-control ps-2" name="descricao" placeholder="Informe a descrição da reunião">{{ old.descricao }}</textarea>
+                        </div>
+                     </div>
+                  </div>
+                  <div class="col-lg-6">
+                     <div class="mb-4">
+                        <label class="form-label">Data</label>
+                        <div class="input-group">
+                           <span class="input-group-text px-6" id="basic-addon1">
+                           <i class="ti ti-calendar fs-6"></i>
+                           </span>
+                           <input type="datetime-local" class="form-control ps-2" name="data" value="{{ old.data }}">
+                        </div>
+                     </div>
+                     <div>
+                        <label class="form-label">Local</label>
+                        <div class="input-group">
+                           <span class="input-group-text px-6" id="basic-addon1">
+                           <i class="ti ti-map-pin fs-6"></i>
+                           </span>
+                           <input type="text" class="form-control ps-2" name="local" value="{{ old.local }}" placeholder="Informe o local da reunião">
                         </div>
                      </div>
                   </div>
@@ -64,7 +93,7 @@
                   <div class="col-12">
                      <div class="d-flex align-items-center gap-3">
                         <button type="submit" class="btn btn-primary">Salvar</button>
-                        <button class="btn bg-danger-subtle text-danger">Cancelar</button>
+                        <a href="/reunioes" class="btn bg-danger-subtle text-danger">Cancelar</a>
                      </div>
                   </div>
                </div>
