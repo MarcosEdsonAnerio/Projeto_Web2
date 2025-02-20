@@ -1,5 +1,9 @@
-import { Controller, Get, Post, Render } from '@nestjs/common';
+import { Body, Controller, Get, Post, Render, Req, Res } from '@nestjs/common';
 import { ServidorService } from './servidor.service';
+import { Response } from 'express';
+import { setFlashErrors, setOld } from 'src/common/helpers/flash-errors';
+import { ServidorValidator } from './servidor.validator';
+
 
 @Controller('servidores')
 export class ServidorController {
@@ -7,8 +11,8 @@ export class ServidorController {
 
     @Get()
     @Render('servidor/index')
-    index() {
-        return { servidores: this.service.getAll() };
+    async index() {
+        return { servidores: await this.service.getAll() };
         // return { servidores: [] };
     }
 
@@ -22,8 +26,28 @@ export class ServidorController {
 
     //Rota para Salvar os dados de cadastro
     @Post('novo')
-    createSave() {
-        return {};
+    async createSave(@Body() dados, @Res() response: Response, @Req() request) {
+
+        try {
+
+            const validador = await new ServidorValidator().validate(dados);
+
+            console.log(validador.isError, validador.getErrors, validador.getData)
+
+            if(validador.isError) {
+                setFlashErrors(request, validador.getErrors,)
+                setOld(request, dados);
+
+                return response.redirect('/servidores/novo')
+            }
+
+            await this.service.create(validador.getData);
+
+        } catch (err){
+            console.log(err);
+        }
+
+        return response.redirect('/servidores');
     }
 
     //Rota de Atualização (Update)

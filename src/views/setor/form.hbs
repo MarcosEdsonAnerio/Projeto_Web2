@@ -1,0 +1,77 @@
+{{#> main}}
+{{#*inline "content"}}
+<div class="card bg-info-subtle shadow-none position-relative overflow-hidden mb-4">
+   <div class="card-body px-4 py-3">
+      <div class="row align-items-center">
+         <div class="col-9">
+            <h4 class="fw-semibold mb-8">Novo Setor</h4>
+            <nav aria-label="breadcrumb">
+               <ol class="breadcrumb">
+                  <li class="breadcrumb-item">
+                     <a class="text-muted text-decoration-none" href="/">Home</a>
+                  </li>
+                  <li class="breadcrumb-item" aria-current="page">
+                     <a class="text-muted text-decoration-none" href="/setores">Setores</a>
+                  </li>
+               </ol>
+            </nav>
+         </div>
+         <div class="col-3">
+            <div class="text-center mb-n5">
+               <img src="../assets/images/breadcrumb/ChatBc.png" alt="modernize-img" class="img-fluid mb-n4">
+            </div>
+         </div>
+      </div>
+   </div>
+</div>
+<div class="row">
+   <div class="col-12">
+      <form action="{{#if setor}}/setores/{{setor.id}}/atualizacao{{else}}/setores/novo{{/if}}" method="post">
+         <div class="card">
+            <div class="px-4 py-3 border-bottom">
+               <h4 class="card-title mb-0">Cadastro de Setor</h4>
+            </div>
+            
+            <div class="card-body p-4 border-bottom">
+                
+                {{#if flashErrors}}
+                    <div class='alert alert-danger'>
+                        {{#each flashErrors}}
+                            <p style="margin: 0; padding: 0;">
+                            {{message}}
+                            </p>
+                        {{/each}}
+                    </div> 
+                {{/if}}
+
+               <h5 class="fs-4 fw-semibold mb-4">Informações do Setor</h5>
+               <div class="row">
+                  <div class="col-lg-6">
+                     <div class="mb-4">
+                        <label class="form-label">Nome do Setor</label>
+                        <div class="input-group">
+                           <span class="input-group-text px-6" id="basic-addon1">
+                           <i class="ti ti-building fs-6"></i>
+                           </span>
+                           <input type="text" class="form-control ps-2" name="nome" value="{{#if setor}}{{setor.nome}}{{else}}{{old.nome}}{{/if}}" placeholder="Informe o nome do setor">
+                        </div>
+                     </div>
+                  </div>
+               </div>
+            </div>
+            <div class="card-body p-4">
+               <div class="row">
+                  <div class="col-12">
+                     <div class="d-flex align-items-center gap-3">
+                        <button type="submit" class="btn btn-primary">Salvar</button>
+                        <button class="btn bg-danger-subtle text-danger">Cancelar</button>
+                     </div>
+                  </div>
+               </div>
+            </div>
+         </div>
+      </form>
+   </div>
+</div>
+{{/inline}}
+{{/main}}

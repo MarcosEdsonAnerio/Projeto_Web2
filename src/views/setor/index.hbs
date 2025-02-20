@@ -1,0 +1,62 @@
+{{#> main}}
+{{#*inline "content"}}
+<div class="card w-100">
+    <div class="card-body p-4">
+        <div class="row">
+            <div class="col col-10">
+                <h5 class="card-title fw-semibold mb-4">Setores</h5>
+            </div>
+            <div class="col">
+                <a href="/setores/novo" class="btn btn-primary">
+                    <i class="ti ti-plus"></i>
+                    <span>Novo Setor</span>
+                </a>
+            </div>
+        </div>
+
+        <div class="table-responsive">
+            {{#unless setores}}
+            <h4>Nenhum setor encontrado na base de dados!</h4>
+            {{/unless}}
+            {{#if setores}}
+            <table class="table text-nowrap mb-0 align-middle">
+                <thead class="text-dark fs-4">
+                    <tr>
+                        <th class="border-bottom-0">
+                            <h6 class="fw-semibold mb-0">#</h6>
+                        </th>
+                        <th class="border-bottom-0">
+                            <h6 class="fw-semibold mb-0">Nome</h6>
+                        </th>
+                        <th class="border-bottom-0">
+                            <h6 class="fw-semibold mb-0">Opções</h6>
+                        </th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {{#each setores}}
+                    <tr>
+                        <td class="border-bottom-0">
+                            <h6 class="fw-semibold mb-0">{{inc @index}}</h6>
+                        </td>
+                        <td class="border-bottom-0">
+                            <h6 class="fw-semibold mb-1">{{this.nome}}</h6>
+                        </td>
+                        <td class="border-bottom-0">
+                            <a href="/setores/{{this.id}}/atualizacao" class="btn btn-warning">
+                                <i class="ti ti-pencil"></i>
+                            </a>
+                            <a href="/setores/{{this.id}}/exclusao" class="btn btn-danger">
+                                <i class="ti ti-trash"></i>
+                            </a>
+                        </td>
+                    </tr>
+                    {{/each}}
+                </tbody>
+            </table>
+            {{/if}}
+        </div>
+    </div>
+</div>
+{{/inline}}
+{{/main}}
