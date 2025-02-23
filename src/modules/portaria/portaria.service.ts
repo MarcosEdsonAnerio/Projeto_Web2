@@ -1,24 +1,41 @@
 import { Injectable } from '@nestjs/common';
-import { Portaria } from 'src/modules/portaria/portaria.entity';
+import { Portaria } from './portaria.entity';
 
 @Injectable()
 export class PortariaService {
     async getAll() {
-        return await Portaria.find();
+        return await Portaria.find({
+            order: { titulo: 'ASC' }
+        });
     }
 
-    async create(data: Partial<Portaria>) {
-        const portaria = Portaria.create(data);
+    async findOneById(id: number) {
+        return await Portaria.findOne({ where: { id: id } });
+    }
+
+    async create(dados: any) {
+        const portaria = Portaria.create({ ...dados });
+
         return await portaria.save();
     }
 
-    async update(id: number, data: Partial<Portaria>) {
-        await Portaria.update(id, data);
-        return await Portaria.findOneBy({ id });
+    async update(id: number, dados: any) {
+        const portaria = await this.findOneById(id);
+
+        if (!portaria) {
+            return null;
+        }
+
+        return await Portaria.update(id, { ...dados });
     }
 
     async delete(id: number) {
-        await Portaria.delete(id);
-        return { deleted: true };
+        const portaria = await this.findOneById(id);
+
+        if (!portaria) {
+            return null;
+        }
+
+        return await Portaria.delete(id);
     }
 }

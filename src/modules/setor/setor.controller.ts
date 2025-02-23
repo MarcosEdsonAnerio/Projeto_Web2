@@ -8,18 +8,22 @@ import { setFlashErrors, setOld } from 'src/common/helpers/flash-errors';
 export class SetorController {
     constructor(private readonly service: SetorService) { }
 
+    // Listar todos os setores
     @Get()
     @Render('setor/index')
     async index() {
         return { setores: await this.service.getAll() };
     }
 
+    // Rota de Cadastro
+    // Abrir o formulário de criação
     @Get('novo')
     @Render('setor/form')
     createForm() {
         return {};
     }
 
+    // Rota para Salvar os dados de cadastro
     @Post('novo')
     async createSave(@Body() dados, @Res() response: Response, @Req() request) {
         try {
@@ -34,13 +38,16 @@ export class SetorController {
 
             await this.service.create(validador.getData);
 
-        } catch {
-            // Tratamento de erros genérico
+        } catch (error) {
+            setFlashErrors(request, ['Ocorreu um erro ao tentar salvar o setor.']);
+            return response.redirect('/setores/novo');
         }
 
         return response.redirect('/setores');
     }
 
+    // Rota de Atualização (Update)
+    // Abrir o formulário de edição
     @Get(':id/atualizacao')
     async updateForm(@Param('id') id: number, @Res() response: Response, @Req() request) {
         try {
@@ -58,6 +65,7 @@ export class SetorController {
         }
     }
 
+    // Rota para Salvar os dados de atualização
     @Post(':id/atualizacao')
     async updateSave(@Param('id') id: number, @Body() dados, @Res() response: Response, @Req() request) {
         try {
@@ -79,12 +87,14 @@ export class SetorController {
             }
 
         } catch {
-            // Tratamento de erros genérico
+            setFlashErrors(request, ['Ocorreu um erro ao tentar atualizar o setor.']);
+            return response.redirect(`/setores/${id}/atualizacao`);
         }
 
         return response.redirect('/setores');
     }
 
+    // Rota de Exclusão (Delete)
     @Get(':id/exclusao')
     async delete(@Param('id') id: number, @Res() response: Response, @Req() request) {
         try {
@@ -97,10 +107,10 @@ export class SetorController {
             const result = await this.service.delete(id);
 
             if (!result) {
-                setFlashErrors(request, ['Informações não foram atualizadas! Tente novamente']);
+                setFlashErrors(request, ['Informações não foram excluídas! Tente novamente']);
             }
         } catch {
-            setFlashErrors(request, ['Ocorreram erros ao buscar informações.']);
+            setFlashErrors(request, ['Ocorreram erros ao tentar excluir o setor.']);
         } finally {
             return response.redirect(`/setores`);
         }

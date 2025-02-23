@@ -3,31 +3,39 @@ import { Setor } from './setor.entity';
 
 @Injectable()
 export class SetorService {
-  // Método para buscar todos os setores
-  async getAll() {
-    return await Setor.find();
-  }
+    async getAll() {
+        return await Setor.find({
+            order: { nome: 'ASC' }
+        });
+    }
 
-  // Método para buscar um setor pelo ID
-  async getById(id: number) {
-    return await Setor.findOneBy({ id });
-  }
+    async findOneById(id: number) {
+        return await Setor.findOne({ where: { id: id } });
+    }
 
-  // Método para criar um novo setor
-  async create(data: any) {
-    const setor = Setor.create({ ...data });
-    return await setor.save();
-  }
+    async create(dados: any) {
+        const setor = Setor.create({ ...dados });
 
-  // Método para atualizar um setor existente
-  async update(id: number, data: any) {
-    await Setor.update(id, data);
-    return await Setor.findOneBy({ id });
-  }
+        return await setor.save();
+    }
 
-  // Método para excluir um setor
-  async delete(id: number) {
-    await Setor.delete(id);
-    return { deleted: true };
-  }
+    async update(id: number, dados: any) {
+        const setor = await this.findOneById(id);
+
+        if (!setor) {
+            return null;
+        }
+
+        return await Setor.update(id, { ...dados });
+    }
+
+    async delete(id: number) {
+        const setor = await this.findOneById(id);
+
+        if (!setor) {
+            return null;
+        }
+
+        return await Setor.delete(id);
+    }
 }

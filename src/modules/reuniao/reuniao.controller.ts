@@ -6,24 +6,25 @@ import { setFlashErrors, setOld } from 'src/common/helpers/flash-errors';
 
 @Controller('reunioes')
 export class ReuniaoController {
-    constructor(private readonly service: ReuniaoService) {}
+    constructor(private readonly service: ReuniaoService) { }
 
-    // Rota para listar todas as reuniões
+    // Listar todas as reuniões
     @Get()
     @Render('reuniao/index')
     async index() {
         return { reunioes: await this.service.getAll() };
     }
 
-    // Rota para exibir o formulário de criação de uma nova reunião
-    @Get('novo')
+    // Rota de Cadastro
+    // Abrir o formulário de criação
+    @Get('nova')
     @Render('reuniao/form')
     createForm() {
         return {};
     }
 
-    // Rota para salvar os dados de cadastro de uma nova reunião
-    @Post('novo')
+    // Rota para Salvar os dados de cadastro
+    @Post('nova')
     async createSave(@Body() dados, @Res() response: Response, @Req() request) {
         try {
             const validador = await new ReuniaoValidator().validate(dados);
@@ -32,19 +33,21 @@ export class ReuniaoController {
                 setFlashErrors(request, validador.getErrors);
                 setOld(request, dados);
 
-                return response.redirect('/reunioes/novo');
+                return response.redirect('/reunioes/nova');
             }
 
             await this.service.create(validador.getData);
 
-        } catch (err) {
-            console.log(err);
+        } catch (error) {
+            setFlashErrors(request, ['Ocorreu um erro ao tentar salvar a reunião.']);
+            return response.redirect('/reunioes/nova');
         }
 
         return response.redirect('/reunioes');
     }
 
-    // Rota para exibir o formulário de atualização de uma reunião existente
+    // Rota de Atualização (Update)
+    // Abrir o formulário de edição
     @Get(':id/atualizacao')
     async updateForm(@Param('id') id: number, @Res() response: Response, @Req() request) {
         try {
@@ -62,7 +65,7 @@ export class ReuniaoController {
         }
     }
 
-    // Rota para salvar os dados de atualização de uma reunião existente
+    // Rota para Salvar os dados de atualização
     @Post(':id/atualizacao')
     async updateSave(@Param('id') id: number, @Body() dados, @Res() response: Response, @Req() request) {
         try {
@@ -84,13 +87,14 @@ export class ReuniaoController {
             }
 
         } catch {
-            // Tratamento de erros genérico
+            setFlashErrors(request, ['Ocorreu um erro ao tentar atualizar a reunião.']);
+            return response.redirect(`/reunioes/${id}/atualizacao`);
         }
 
         return response.redirect('/reunioes');
     }
 
-    // Rota para excluir uma reunião
+    // Rota de Exclusão (Delete)
     @Get(':id/exclusao')
     async delete(@Param('id') id: number, @Res() response: Response, @Req() request) {
         try {
@@ -103,10 +107,10 @@ export class ReuniaoController {
             const result = await this.service.delete(id);
 
             if (!result) {
-                setFlashErrors(request, ['Informações não foram atualizadas! Tente novamente']);
+                setFlashErrors(request, ['Informações não foram excluídas! Tente novamente']);
             }
         } catch {
-            setFlashErrors(request, ['Ocorreram erros ao buscar informações.']);
+            setFlashErrors(request, ['Ocorreram erros ao tentar excluir a reunião.']);
         } finally {
             return response.redirect(`/reunioes`);
         }
