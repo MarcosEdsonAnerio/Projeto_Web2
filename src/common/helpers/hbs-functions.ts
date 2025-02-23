@@ -6,7 +6,7 @@ const helpers = {
   formatDate: (date: string) => {
     if (!date) return '';
     const locale = new Date(date);
-    return locale.toLocaleDateString('pt-BR'); // Formata apenas a data (sem hora)
+    return locale.toLocaleDateString('pt-BR');
   },
   inc: (value: string) => parseInt(value) + 1,
   json: (value: any) => JSON.stringify(value),

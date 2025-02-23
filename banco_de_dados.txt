@@ -2,147 +2,116 @@
 CREATE DATABASE IF NOT EXISTS tarefas_db;
 USE tarefas_db;
 
--- Criação da tabela campus
+-- Tabela Campus
 CREATE TABLE IF NOT EXISTS campus (
     id_cam INT NOT NULL AUTO_INCREMENT,
     nome_cam VARCHAR(255) NOT NULL,
     PRIMARY KEY (id_cam)
 );
 
--- Inserção dos campi (incluindo 3 novos)
-INSERT INTO campus (nome_cam) VALUES 
-    ("IFRO - Campus Ji-Paraná"),
-    ("IFRO - Campus Cacoal"),
-    ("IFRO - Campus Vilhena"),
-    ("IFRO - Campus Ariquemes"),
-    ("IFRO - Campus Porto Velho"),
-    ("IFRO - Campus Guajará-Mirim");
-
--- Criação da tabela servidor com a nova coluna cpf_ser
+-- Tabela Servidor
 CREATE TABLE IF NOT EXISTS servidor (
     id_ser INT NOT NULL AUTO_INCREMENT,
-    nome_ser TEXT NOT NULL,
-    cpf_ser TEXT NOT NULL,
+    nome_ser VARCHAR(255) NOT NULL,
+    cpf_ser VARCHAR(14) NOT NULL,
     siape_ser INT NOT NULL,
-    id_cam_fk INT NOT NULL,
-    PRIMARY KEY(id_ser),
-    FOREIGN KEY(id_cam_fk) REFERENCES campus (id_cam)
+    PRIMARY KEY (id_ser)
 );
 
--- Inserção dos servidores (incluindo 3 novos com CPF)
-INSERT INTO servidor (nome_ser, cpf_ser, siape_ser, id_cam_fk) VALUES 
-    ("João Teixeira", "123.456.789-00", 534534, 1),       -- Ji-Paraná
-    ("Reinaldo Pereira", "987.654.321-00", 534538, 1),   -- Ji-Paraná
-    ("Jefferson Antonio", "111.222.333-44", 123215, 2),  -- Cacoal
-    ("Elias Abreu", "555.666.777-88", 123216, 3),        -- Vilhena
-    ("Mariana Costa", "999.888.777-66", 654321, 4),      -- Ariquemes
-    ("Carlos Souza", "444.333.222-11", 654322, 5),       -- Porto Velho
-    ("Ana Paula Ribeiro", "222.111.000-99", 654323, 6);  -- Guajará-Mirim
-
--- Consulta para verificar todos os dados
-SELECT 
-    S.id_ser, 
-    S.nome_ser, 
-    S.cpf_ser, 
-    S.siape_ser, 
-    C.nome_cam 
-FROM 
-    servidor S 
-JOIN 
-    campus C 
-ON 
-    S.id_cam_fk = C.id_cam;
-    
--- ----------------------------------------------------------------------------------
-
--- Uso do banco de dados existente
-USE tarefas_db;
-
--- Criação da tabela portaria
-CREATE TABLE portaria (
+-- Tabela Portaria
+CREATE TABLE IF NOT EXISTS portaria (
     id_por INT NOT NULL AUTO_INCREMENT,
-    numero_por VARCHAR(50) NOT NULL,
+    titulo_por VARCHAR(255) NOT NULL,
     descricao_por TEXT NOT NULL,
-    data_emissao DATE NOT NULL,
+    data_inicio_por DATE NOT NULL,
+    data_termino_por DATE,
+    local_por VARCHAR(255) NOT NULL,
+    responsavel_por VARCHAR(255) NOT NULL,
     PRIMARY KEY (id_por)
 );
 
--- Inserção de exemplos de portarias
-INSERT INTO portaria (numero_por, descricao_por, data_emissao) VALUES
-    ("001/2024", "Portaria para alteração de carga horária docente.", '2024-01-15'),
-    ("002/2024", "Designação de comissão para evento institucional.", '2024-02-10'),
-    ("003/2024", "Concessão de licença prêmio ao servidor.", '2024-03-05'),
-    ("004/2024", "Autorização para uso de espaço físico.", '2024-04-12'),
-    ("005/2024", "Nomeação para cargo de chefia.", '2024-05-20');
+-- Tabela Cargo
+CREATE TABLE IF NOT EXISTS cargo (
+    id_car INT NOT NULL AUTO_INCREMENT,
+    nome_car VARCHAR(255) NOT NULL,
+    descricao_car TEXT NOT NULL,
+    salario_base_car DECIMAL(10, 2) NOT NULL,
+    valor_beneficio_car DECIMAL(10, 2),
+    valor_bonus_car DECIMAL(10, 2),
+    PRIMARY KEY (id_car)
+);
 
--- Criação da tabela intermediária para associação muitos-para-muitos entre portarias e servidores
-CREATE TABLE portaria_servidor (
+-- Tabela Reunião
+CREATE TABLE IF NOT EXISTS reuniao (
+    id_reu INT NOT NULL AUTO_INCREMENT,
+    titulo_reu VARCHAR(255) NOT NULL,
+    descricao_reu TEXT NOT NULL,
+    data_reu DATE NOT NULL,
+    local_reu VARCHAR(255) NOT NULL,
+    responsavel_reu VARCHAR(255) NOT NULL,
+    setor_id_reu INT,
+    PRIMARY KEY (id_reu)
+);
+
+-- Tabela Setor
+CREATE TABLE IF NOT EXISTS setor (
+    id_set INT NOT NULL AUTO_INCREMENT,
+    nome_set VARCHAR(255) NOT NULL,
+    descricao_set TEXT NOT NULL,
+    responsavel_id_set INT,
+    setor_pai_id_set INT,
+    PRIMARY KEY (id_set),
+    FOREIGN KEY (responsavel_id_set) REFERENCES servidor(id_ser),
+    FOREIGN KEY (setor_pai_id_set) REFERENCES setor(id_set)
+);
+
+-- Tabela User
+CREATE TABLE IF NOT EXISTS user (
+    id_usr INT NOT NULL AUTO_INCREMENT,
+    nome_usr VARCHAR(255) NOT NULL,
+    email_usr VARCHAR(255) NOT NULL UNIQUE,
+    senha_usr VARCHAR(255) NOT NULL,
+    cargo_usr VARCHAR(255),
+    PRIMARY KEY (id_usr)
+);
+
+-- Tabela PortariaServidor (Relacionamento Muitos-para-Muitos entre Portaria e Servidor)
+CREATE TABLE IF NOT EXISTS portaria_servidor (
     id_ps INT NOT NULL AUTO_INCREMENT,
     id_por_fk INT NOT NULL,
     id_ser_fk INT NOT NULL,
     PRIMARY KEY (id_ps),
-    FOREIGN KEY (id_por_fk) REFERENCES portaria(id_por) ON DELETE CASCADE,
-    FOREIGN KEY (id_ser_fk) REFERENCES servidor(id_ser) ON DELETE CASCADE
+    FOREIGN KEY (id_por_fk) REFERENCES portaria (id_por) ON DELETE CASCADE,
+    FOREIGN KEY (id_ser_fk) REFERENCES servidor (id_ser) ON DELETE CASCADE
 );
 
--- Inserção de exemplos de associações entre portarias e servidores
-INSERT INTO portaria_servidor (id_por_fk, id_ser_fk) VALUES
-    (1, 1), -- João Teixeira na Portaria 001/2024
-    (2, 2), -- Reinaldo Pereira na Portaria 002/2024
-    (2, 3), -- Jefferson Antonio na Portaria 002/2024
-    (3, 4), -- Elias Abreu na Portaria 003/2024
-    (4, 5), -- Mariana Costa na Portaria 004/2024
-    (5, 6), -- Carlos Souza na Portaria 005/2024
-    (5, 7); -- Ana Paula Ribeiro na Portaria 005/2024
 
--- Consulta para verificar portarias e seus servidores associados
-SELECT 
-    P.id_por, 
-    P.numero_por, 
-    P.descricao_por, 
-    P.data_emissao,
-    S.nome_ser
-FROM 
-    portaria P
-JOIN 
-    portaria_servidor PS ON P.id_por = PS.id_por_fk
-JOIN 
-    servidor S ON PS.id_ser_fk = S.id_ser
-ORDER BY 
-    P.id_por;
-
--- ----------------------------------------------------------------------------------
-
--- Uso do banco de dados existente
-USE tarefas_db;
-
--- Criação da tabela setor
-CREATE TABLE IF NOT EXISTS setor (
-    id_set INT NOT NULL AUTO_INCREMENT,          -- ID do setor
-    nome_set VARCHAR(255) NOT NULL,              -- Nome do setor
-    id_cam_fk INT NOT NULL,                      -- Chave estrangeira para o campus
-    PRIMARY KEY (id_set),                        -- Chave primária
-    FOREIGN KEY (id_cam_fk) REFERENCES campus (id_cam) -- Relação com a tabela campus
-);
-
--- Inserção de exemplos de setores
-INSERT INTO setor (nome_set, id_cam_fk) VALUES
-    ("Direção Geral", 1),                        -- Setor do Campus Ji-Paraná
-    ("Coordenação de Ensino", 1),                -- Setor do Campus Ji-Paraná
-    ("Coordenação de Pesquisa", 2),              -- Setor do Campus Cacoal
-    ("Coordenação de Extensão", 3),              -- Setor do Campus Vilhena
-    ("Coordenação de Administração", 4),         -- Setor do Campus Ariquemes
-    ("Coordenação de Tecnologia", 5),            -- Setor do Campus Porto Velho
-    ("Coordenação de Recursos Humanos", 6);      -- Setor do Campus Guajará-Mirim
-
--- Consulta para verificar todos os setores e seus campi associados
-SELECT 
-    S.id_set, 
-    S.nome_set, 
-    C.nome_cam 
-FROM 
-    setor S 
-JOIN 
-    campus C 
-ON 
-    S.id_cam_fk = C.id_cam;
+INSERT INTO cargo (nome_car, descricao_car, salario_base_car, valor_beneficio_car, valor_bonus_car) VALUES
+    ('Analista de Sistemas', 'Responsável pelo desenvolvimento e manutenção de sistemas.', 5000.00, 800.00, 300.00),
+    ('Professor', 'Responsável por ministrar aulas e orientar alunos.', 7000.00, 1000.00, 500.00),
+    ('Administrador', 'Responsável pela gestão administrativa do campus.', 6000.00, 900.00, 400.00);
+    
+    INSERT INTO portaria (titulo_por, descricao_por, data_inicio_por, data_termino_por, local_por, responsavel_por) VALUES
+    ('Portaria 001/2024', 'Portaria para alteração de carga horária docente.', '2024-01-15', '2024-01-20', 'Auditório Central', 'João Teixeira'),
+    ('Portaria 002/2024', 'Designação de comissão para evento institucional.', '2024-02-10', '2024-02-15', 'Sala 101', 'Reinaldo Pereira'),
+    ('Portaria 003/2024', 'Concessão de licença prêmio ao servidor.', '2024-03-05', NULL, 'Sala da Direção', 'Jefferson Antonio');
+    
+    INSERT INTO reuniao (titulo_reu, descricao_reu, data_reu, local_reu, responsavel_reu, setor_id_reu) VALUES
+    ('Reunião de Planejamento', 'Reunião para planejamento do semestre letivo.', '2024-01-20', 'Sala 101', 'João Teixeira', 1),
+    ('Reunião de Avaliação', 'Reunião para avaliação do desempenho docente.', '2024-02-15', 'Auditório Central', 'Reinaldo Pereira', 2),
+    ('Reunião de Integração', 'Reunião para integração de novos servidores.', '2024-03-10', 'Sala de Reuniões', 'Mariana Costa', 3);
+    
+    INSERT INTO servidor (nome_ser, cpf_ser, siape_ser) VALUES
+    ('João Teixeira', '123.456.789-00', 534534),
+    ('Reinaldo Pereira', '987.654.321-00', 534538),
+    ('Jefferson Antonio', '111.222.333-44', 123215);
+    
+    INSERT INTO setor (nome_set, descricao_set, responsavel_id_set, setor_pai_id_set) VALUES
+    ('TI', 'Setor de Tecnologia da Informação.', 1, NULL),
+    ('RH', 'Setor de Recursos Humanos.', 2, NULL),
+    ('Financeiro', 'Setor Financeiro.', 3, NULL);
+    
+    INSERT INTO user (nome_usr, email_usr, senha_usr, cargo_usr) VALUES
+    ('Admin', 'admin@ifro.edu.br', 'senha123', 'Administrador'),
+    ('João Teixeira', 'joao@ifro.edu.br', 'senha456', 'Analista de Sistemas'),
+    ('Reinaldo Pereira', 'reinaldo@ifro.edu.br', 'senha789', 'Professor');
