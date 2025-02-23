@@ -11,21 +11,21 @@
     <div class="card-body p-4">
         <div class="row">
             <div class="col col-10">
-                <h5 class="card-title fw-semibold mb-4">Reuniões</h5>
+                <h5 class="card-title fw-semibold mb-4">Usuários</h5>
             </div>
             <div class="col">
-                <a href="/reunioes/nova" class="btn btn-primary">
+                <a href="/users/novo" class="btn btn-primary">
                     <i class="ti ti-plus"></i>
-                    <span>Reunião</span>
+                    <span>Usuário</span>
                 </a>
             </div>
         </div>
 
         <div class="table-responsive">
-            {{#unless reunioes}}
-            <h4>Nenhuma reunião encontrada na base de dados!</h4>
+            {{#unless users}}
+            <h4>Nenhum usuário encontrado na base de dados!</h4>
             {{/unless}}
-            {{#if reunioes}}
+            {{#if users}}
             <table class="table text-nowrap mb-0 align-middle">
                 <thead class="text-dark fs-4">
                     <tr>
@@ -33,19 +33,13 @@
                             <h6 class="fw-semibold mb-0">#</h6>
                         </th>
                         <th class="border-bottom-0">
-                            <h6 class="fw-semibold mb-0">Título</h6>
+                            <h6 class="fw-semibold mb-0">Nome</h6>
                         </th>
                         <th class="border-bottom-0">
-                            <h6 class="fw-semibold mb-0">Descrição</h6>
+                            <h6 class="fw-semibold mb-0">E-mail</h6>
                         </th>
                         <th class="border-bottom-0">
-                            <h6 class="fw-semibold mb-0">Data</h6>
-                        </th>
-                        <th class="border-bottom-0">
-                            <h6 class="fw-semibold mb-0">Local</h6>
-                        </th>
-                        <th class="border-bottom-0">
-                            <h6 class="fw-semibold mb-0">Responsável</h6>
+                            <h6 class="fw-semibold mb-0">Cargo</h6>
                         </th>
                         <th class="border-bottom-0">
                             <h6 class="fw-semibold mb-0">Opções</h6>
@@ -53,31 +47,25 @@
                     </tr>
                 </thead>
                 <tbody>
-                    {{#each reunioes}}
+                    {{#each users}}
                     <tr>
                         <td class="border-bottom-0">
                             <h6 class="fw-semibold mb-0">{{inc @index}}</h6>
                         </td>
                         <td class="border-bottom-0">
-                            <h6 class="fw-semibold mb-1">{{this.titulo}}</h6>
+                            <h6 class="fw-semibold mb-1">{{this.nome}}</h6>
                         </td>
                         <td class="border-bottom-0">
-                            <p class="mb-0 fw-normal">{{this.descricao}}</p>
+                            <p class="mb-0 fw-normal">{{this.email}}</p>
                         </td>
                         <td class="border-bottom-0">
-                            <p class="mb-0 fw-normal">{{formatDate this.data}}</p>
+                            <p class="mb-0 fw-normal">{{this.cargo}}</p>
                         </td>
                         <td class="border-bottom-0">
-                            <p class="mb-0 fw-normal">{{this.local}}</p>
-                        </td>
-                        <td class="border-bottom-0">
-                            <p class="mb-0 fw-normal">{{this.responsavel}}</p>
-                        </td>
-                        <td class="border-bottom-0">
-                            <a href="/reunioes/{{this.id}}/atualizacao" class="btn btn-warning">
+                            <a href="/users/{{this.id}}/atualizacao" class="btn btn-warning">
                                 <i class="ti ti-pencil"></i>
                             </a>
-                            <a href="/reunioes/{{this.id}}/exclusao" class="btn btn-danger">
+                            <a href="/users/{{this.id}}/exclusao" class="btn btn-danger">
                                 <i class="ti ti-trash"></i>
                             </a>
                         </td>

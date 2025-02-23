@@ -1,6 +1,6 @@
 import { Module } from '@nestjs/common';
 import { AuthModule } from './modules/auth/auth.module';
-import { UsersModule } from './modules/users/users.module';
+import { UserModule } from './modules/user/user.module';
 import { AppController } from './app.controller';
 import { ServidorModule } from './modules/servidor/servidor.module';
 import { CargoModule } from './modules/cargo/cargo.module';
@@ -10,7 +10,7 @@ import { SetorModule } from './modules/setor/setor.module';
 import { DatabaseModule } from './database/database.module';
 
 @Module({
-  imports: [DatabaseModule, AuthModule, UsersModule, ServidorModule, CargoModule, PortariaModule, ReuniaoModule, SetorModule],
+  imports: [DatabaseModule, AuthModule, UserModule, ServidorModule, CargoModule, PortariaModule, ReuniaoModule, SetorModule],
   controllers: [AppController],
   providers: [],
 })

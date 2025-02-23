@@ -4,118 +4,123 @@
    <div class="card-body px-4 py-3">
       <div class="row align-items-center">
          <div class="col-9">
-            <h4 class="fw-semibold mb-8">Novo Servidor</h4>
+            <h4 class="fw-semibold mb-8">{{#if cargo}}Atualização{{else}}Novo{{/if}} Cargo</h4>
             <nav aria-label="breadcrumb">
                <ol class="breadcrumb">
-                  <li class="breadcrumb-item">
-                     <a class="text-muted text-decoration-none" href="/">Home</a>
-                  </li>
-                  <li class="breadcrumb-item" aria-current="page">
-                     <a class="text-muted text-decoration-none" href="/servidores">Servidores</a>
-                  </li>
+                  <li class="breadcrumb-item"> <a class="text-muted text-decoration-none" href="/">Home</a> </li>
+                  <li class="breadcrumb-item" aria-current="page"> <a class="text-muted text-decoration-none"
+                        href="/cargos">Cargos</a> </li>
                </ol>
             </nav>
          </div>
          <div class="col-3">
-            <div class="text-center mb-n5">
-               <img src="../assets/images/breadcrumb/ChatBc.png" alt="modernize-img" class="img-fluid mb-n4">
-            </div>
+            <div class="text-center mb-n5"> <img src="../assets/images/breadcrumb/ChatBc.png" alt="modernize-img"
+                  class="img-fluid mb-n4"> </div>
          </div>
       </div>
    </div>
 </div>
 <div class="row">
    <div class="col-12">
-      <form action="/servidores/novo" method="post">
+      <form action="{{#if cargo}}/cargos/{{cargo.id}}/atualizacao{{else}}/cargos/novo{{/if}}" method="post">
          <div class="card">
             <div class="px-4 py-3 border-bottom">
-               <h4 class="card-title mb-0">Cadastro de Novo Servidor</h4>
+               <h4 class="card-title mb-0">{{#if cargo}}Atualização de{{else}}Cadastro de Novo{{/if}} Cargo</h4>
             </div>
-            
             <div class="card-body p-4 border-bottom">
-                
-                {{#if flashErrors}}
-                    <div class='alert alert-danger'>
-                        {{#each flashErrors}}
-                            <p style="margin: 0; padding: 0;">
-                            {{message}}
-                            </p>
-                        {{/each}}
-                    </div> 
-                {{/if}}
 
-               <h5 class="fs-4 fw-semibold mb-4">Informações pessoais</h5>
+               {{#if flashErrors}}
+               <div class='alert alert-danger'>
+                  {{#each flashErrors}}
+                  <p style="margin: 0; padding: 0;"> {{message}} </p>
+                  {{/each}}
+               </div>
+               {{/if}}
+
+               {{#if flashErrors}}
+               <div class='alert alert-danger'>
+                  {{#each flashErrors}}
+                  {{#each messages}}
+                  <p style="margin: 0; padding: 0;"> {{this}} </p>
+                  {{/each}}
+                  {{/each}}
+               </div>
+               {{/if}}
+
+               <h5 class="fs-4 fw-semibold mb-4">Informações do Cargo</h5>
                <div class="row">
                   <div class="col-lg-6">
                      <div class="mb-4">
-                        <label class="form-label">Nome completo</label>
+                        <label class="form-label">Nome do Cargo</label>
                         <div class="input-group">
                            <span class="input-group-text px-6" id="basic-addon1">
-                           <i class="ti ti-user fs-6"></i>
-                           </span>
-                           <input type="text" class="form-control ps-2" name="nome" value="{{ old.nome }}" placeholder="Informe o nome completo do servidor">
-                           
+                              <i class="ti ti-briefcase fs-6"></i> </span>
+                           <input type="text" class="form-control ps-2" name="nome"
+                              value="{{setValue old.nome cargo.nome}}"
+                              placeholder="Informe o nome do cargo">
                         </div>
+                        {{#each (error-messages errors 'nome')}}
+                        <p class="text-danger" style="margin: 0; padding: 0;"><small>{{this}}</small></p>
+                        {{/each}}
                      </div>
-                     <div>
-                        <label class="form-label">Telefone</label>
+                     <div class="mb-4">
+                        <label class="form-label">Descrição</label>
                         <div class="input-group">
                            <span class="input-group-text px-6" id="basic-addon1">
-                           <i class="ti ti-phone fs-6"></i>
-                           </span>
-                           <input type="text" class="form-control ps-2" name="telefone" placeholder="(69) 99200-0102">
+                              <i class="ti ti-align-left fs-6"></i> </span>
+                           <textarea class="form-control ps-2" name="descricao"
+                              placeholder="Informe a descrição do cargo">{{setValue old.descricao cargo.descricao}}</textarea>
                         </div>
+                        {{#each (error-messages errors 'descricao')}}
+                        <p class="text-danger" style="margin: 0; padding: 0;"><small>{{this}}</small></p>
+                        {{/each}}
                      </div>
                   </div>
                   <div class="col-lg-6">
                      <div class="mb-4">
-                        <label class="form-label">CPF</label>
+                        <label class="form-label">Salário Base</label>
                         <div class="input-group">
                            <span class="input-group-text px-6" id="basic-addon1">
-                           <i class="ti ti-building-arch fs-6"></i>
-                           </span>
-                           <input type="text" class="form-control ps-2" name="cpf" placeholder="Informe o CPF. Exemplo: 123.456.789-01">
+                              <i class="ti ti-currency-dollar fs-6"></i> </span>
+                           <input type="number" class="form-control ps-2" name="salarioBase"
+                              value="{{setValue old.salarioBase cargo.salarioBase}}"
+                              placeholder="Informe o salário base">
                         </div>
+                        {{#each (error-messages errors 'salarioBase')}}
+                        <p class="text-danger" style="margin: 0; padding: 0;"><small>{{this}}</small></p>
+                        {{/each}}
                      </div>
-                     <div>
-                        <label class="form-label">E-mail</label>
+                     <div class="mb-4">
+                        <label class="form-label">Valor do Benefício</label>
                         <div class="input-group">
                            <span class="input-group-text px-6" id="basic-addon1">
-                           <i class="ti ti-mail fs-6"></i>
-                           </span>
-                           <input type="text" class="form-control ps-2" name="email" placeholder="Informe o e-mail. Ex.: joao@gmail.com">
+                              <i class="ti ti-currency-dollar fs-6"></i> </span>
+                           <input type="number" class="form-control ps-2" name="valorBeneficio"
+                              value="{{setValue old.valorBeneficio cargo.valorBeneficio}}"
+                              placeholder="Informe o valor do benefício">
                         </div>
+                        {{#each (error-messages errors 'valorBeneficio')}}
+                        <p class="text-danger" style="margin: 0; padding: 0;"><small>{{this}}</small></p>
+                        {{/each}}
+                     </div>
+                     <div class="mb-4">
+                        <label class="form-label">Valor do Bônus</label>
+                        <div class="input-group">
+                           <span class="input-group-text px-6" id="basic-addon1">
+                              <i class="ti ti-currency-dollar fs-6"></i> </span>
+                           <input type="number" class="form-control ps-2" name="valorBonus"
+                              value="{{setValue old.valorBonus cargo.valorBonus}}"
+                              placeholder="Informe o valor do bônus">
+                        </div>
+                        {{#each (error-messages errors 'valorBonus')}}
+                        <p class="text-danger" style="margin: 0; padding: 0;"><small>{{this}}</small></p>
+                        {{/each}}
                      </div>
                   </div>
                </div>
             </div>
             <div class="card-body p-4">
-               <h5 class="fs-4 fw-semibold mb-4">Informações da empresa</h5>
                <div class="row">
-                  <div class="col-lg-6">
-                     <div class="mb-4">
-                        <label class="form-label">SIAPE</label>
-                        <div class="input-group">
-                           <span class="input-group-text px-6" id="basic-addon1">
-                           <i class="ti ti-building-arch fs-6"></i>
-                           </span>
-                           <input type="text" class="form-control ps-2" name="siape" placeholder="Informe o número do SIAPE.">
-                        </div>
-                     </div>
-                     <div class="mb-4">
-                        {{!-- <label class="form-label">Country</label>
-                        <select class="form-select" aria-label="Default select example">
-                           <option selected="">India</option>
-                           <option value="1">United Kingdom</option>
-                           <option value="2">Srilanka</option>
-                        </select>
-                        --}}
-                     </div>
-                     <div class="mb-4">
-                        {{!-- <label for="exampleInputBirthDate" class="form-label">Birth Date</label>
-                        <input id="exampleInputBirthDate" class="form-control" type="date"> --}}
-                     </div>
-                  </div>
                   <div class="col-12">
                      <div class="d-flex align-items-center gap-3">
                         <button type="submit" class="btn btn-primary">Salvar</button>

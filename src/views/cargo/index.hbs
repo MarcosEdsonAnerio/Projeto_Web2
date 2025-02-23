@@ -1,25 +1,31 @@
 {{#> main}}
 {{#*inline "content"}}
+{{#if flashErrors}}
+<div class='alert alert-danger'>
+    {{#each flashErrors}}
+    <p style="margin: 0; padding: 0;"> {{this}} </p>
+    {{/each}}
+</div>
+{{/if}}
 <div class="card w-100">
     <div class="card-body p-4">
         <div class="row">
             <div class="col col-10">
-                <h5 class="card-title fw-semibold mb-4">Servidores</h5>
+                <h5 class="card-title fw-semibold mb-4">Cargos</h5>
             </div>
             <div class="col">
-                <a href="/servidores/novo" class="btn btn-primary">
+                <a href="/cargos/novo" class="btn btn-primary">
                     <i class="ti ti-plus"></i>
-                    <span>Servidor</span>
+                    <span>Cargo</span>
                 </a>
             </div>
         </div>
 
-
         <div class="table-responsive">
-            {{#unless servidores}}
-            <h4>Nenhum servidor encontrada na base de dados!</h4>
+            {{#unless cargos}}
+            <h4>Nenhum cargo encontrado na base de dados!</h4>
             {{/unless}}
-            {{#if servidores}}
+            {{#if cargos}}
             <table class="table text-nowrap mb-0 align-middle">
                 <thead class="text-dark fs-4">
                     <tr>
@@ -30,10 +36,10 @@
                             <h6 class="fw-semibold mb-0">Nome</h6>
                         </th>
                         <th class="border-bottom-0">
-                            <h6 class="fw-semibold mb-0">Siape</h6>
+                            <h6 class="fw-semibold mb-0">Descrição</h6>
                         </th>
                         <th class="border-bottom-0">
-                            <h6 class="fw-semibold mb-0">Campus</h6>
+                            <h6 class="fw-semibold mb-0">Salário Base</h6>
                         </th>
                         <th class="border-bottom-0">
                             <h6 class="fw-semibold mb-0">Opções</h6>
@@ -41,28 +47,25 @@
                     </tr>
                 </thead>
                 <tbody>
-                    {{#each servidores}}
+                    {{#each cargos}}
                     <tr>
                         <td class="border-bottom-0">
                             <h6 class="fw-semibold mb-0">{{inc @index}}</h6>
                         </td>
                         <td class="border-bottom-0">
                             <h6 class="fw-semibold mb-1">{{this.nome}}</h6>
-                            <span class="fw-normal">Professor</span>
                         </td>
                         <td class="border-bottom-0">
-                            <p class="mb-0 fw-normal">{{this.siape}}</p>
+                            <p class="mb-0 fw-normal">{{this.descricao}}</p>
                         </td>
                         <td class="border-bottom-0">
-                            <div class="d-flex align-items-center gap-2">
-                                <span class="badge bg-primary rounded-3 fw-semibold">{{this.campus.nome}}</span>
-                            </div>
+                            <p class="mb-0 fw-normal">{{formatCurrency this.salarioBase}}</p>
                         </td>
                         <td class="border-bottom-0">
-                            <a href="/servidores/{{this.id}}/atualizacao" class="btn btn-warning">
+                            <a href="/cargos/{{this.id}}/atualizacao" class="btn btn-warning">
                                 <i class="ti ti-pencil"></i>
                             </a>
-                            <a href="/servidores/{{this.id}}/exclusao" class="btn btn-danger">
+                            <a href="/cargos/{{this.id}}/exclusao" class="btn btn-danger">
                                 <i class="ti ti-trash"></i>
                             </a>
                         </td>
@@ -74,6 +77,5 @@
         </div>
     </div>
 </div>
-
 {{/inline}}
 {{/main}}
