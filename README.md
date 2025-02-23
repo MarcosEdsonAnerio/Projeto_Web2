@@ -1,5 +1,4 @@
-# Aplicação Web - Gestão Fácil
-## _Aplicação web para gestão de emissão e consultas de portarias_
+# Projeto Web2
 Aplicação desenvolvida para Disciplina de Programação Web.
 
 ## Tecnologias
