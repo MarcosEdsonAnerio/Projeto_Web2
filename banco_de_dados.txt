@@ -53,6 +53,15 @@ CREATE TABLE IF NOT EXISTS reuniao (
     PRIMARY KEY (id_reu)
 );
 
+-- Tabela Disciplina
+CREATE TABLE IF NOT EXISTS disciplina (
+    id_dis INT NOT NULL AUTO_INCREMENT,
+    nome_dis VARCHAR(255) NOT NULL,
+    codigo_dis VARCHAR(50) NOT NULL,
+    carga_horaria_dis INT NOT NULL,
+    PRIMARY KEY (id_dis)
+);
+
 -- Tabela Setor
 CREATE TABLE IF NOT EXISTS setor (
     id_set INT NOT NULL AUTO_INCREMENT,
@@ -73,6 +82,17 @@ CREATE TABLE IF NOT EXISTS user (
     senha_usr VARCHAR(255) NOT NULL,
     cargo_usr VARCHAR(255),
     PRIMARY KEY (id_usr)
+);
+
+-- Tabela Aluno
+CREATE TABLE IF NOT EXISTS aluno (
+    id_alu INT NOT NULL AUTO_INCREMENT,
+    nome_alu VARCHAR(255) NOT NULL,
+    cpf_alu VARCHAR(14) NOT NULL,
+    data_nascimento_alu DATE NOT NULL,
+    email_alu VARCHAR(255) NOT NULL,
+    telefone_alu VARCHAR(15) NOT NULL,
+    PRIMARY KEY (id_alu)
 );
 
 -- Tabela PortariaServidor (Relacionamento Muitos-para-Muitos entre Portaria e Servidor)
@@ -115,3 +135,13 @@ INSERT INTO cargo (nome_car, descricao_car, salario_base_car, valor_beneficio_ca
     ('Admin', 'admin@ifro.edu.br', 'senha123', 'Administrador'),
     ('João Teixeira', 'joao@ifro.edu.br', 'senha456', 'Analista de Sistemas'),
     ('Reinaldo Pereira', 'reinaldo@ifro.edu.br', 'senha789', 'Professor');
+    
+    INSERT INTO aluno (nome_alu, cpf_alu, data_nascimento_alu, email_alu, telefone_alu) VALUES
+    ('Maria Silva', '111.222.333-44', '2005-03-15', 'maria.silva@escola.com', '(69) 99200-0102'),
+    ('João Oliveira', '555.666.777-88', '2006-07-22', 'joao.oliveira@escola.com', '(69) 99200-0203'),
+    ('Ana Souza', '999.888.777-66', '2004-11-30', 'ana.souza@escola.com', '(69) 99200-0304');
+    
+    INSERT INTO disciplina (nome_dis, codigo_dis, carga_horaria_dis) VALUES
+    ('Matemática', 'MAT101', 60),
+    ('Português', 'POR202', 80),
+    ('História', 'HIS303', 40);

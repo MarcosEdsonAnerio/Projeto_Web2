@@ -1,0 +1,141 @@
+{{#> main}}
+{{#*inline "content"}}
+<div class="card bg-info-subtle shadow-none position-relative overflow-hidden mb-4">
+   <div class="card-body px-4 py-3">
+      <div class="row align-items-center">
+         <div class="col-9">
+            <h4 class="fw-semibold mb-8">{{#if aluno}}Atualização{{else}}Novo{{/if}} Aluno</h4>
+            <nav aria-label="breadcrumb">
+               <ol class="breadcrumb">
+                  <li class="breadcrumb-item"> <a class="text-muted text-decoration-none" href="/">Home</a> </li>
+                  <li class="breadcrumb-item" aria-current="page"> <a class="text-muted text-decoration-none"
+                        href="/alunos">Alunos</a> </li>
+               </ol>
+            </nav>
+         </div>
+         <div class="col-3">
+            <div class="text-center mb-n5"> <img src="../assets/images/breadcrumb/ChatBc.png" alt="modernize-img"
+                  class="img-fluid mb-n4"> </div>
+         </div>
+      </div>
+   </div>
+</div>
+<div class="row">
+   <div class="col-12">
+      <form action="{{#if aluno}}/alunos/{{aluno.id}}/atualizacao{{else}}/alunos/novo{{/if}}" method="post">
+         <div class="card">
+            <div class="px-4 py-3 border-bottom">
+               <h4 class="card-title mb-0">{{#if aluno}}Atualização de{{else}}Cadastro de Novo{{/if}} Aluno</h4>
+            </div>
+            <div class="card-body p-4 border-bottom">
+
+               {{#if flashErrors}}
+               <div class='alert alert-danger'>
+                  {{#each flashErrors}}
+                  <p style="margin: 0; padding: 0;"> {{message}} </p>
+                  {{/each}}
+               </div>
+               {{/if}}
+
+               {{#if flashErrors}}
+               <div class='alert alert-danger'>
+                  {{#each flashErrors}}
+                  {{#each messages}}
+                  <p style="margin: 0; padding: 0;"> {{this}} </p>
+                  {{/each}}
+                  {{/each}}
+               </div>
+               {{/if}}
+
+               <h5 class="fs-4 fw-semibold mb-4">Informações pessoais</h5>
+               <div class="row">
+                  <div class="col-lg-6">
+                     <div class="mb-4">
+                        <label class="form-label">Nome completo</label>
+                        <div class="input-group">
+                           <span class="input-group-text px-6" id="basic-addon1">
+                              <i class="ti ti-user fs-6"></i> </span>
+                           <input type="text" class="form-control ps-2" name="nome"
+                              value="{{setValue old.nome aluno.nome}}"
+                              placeholder="Informe o nome completo do aluno">
+                        </div>
+                        {{#each (error-messages errors 'nome')}}
+                        <p class="text-danger" style="margin: 0; padding: 0;"><small>{{this}}</small></p>
+                        {{/each}}
+                     </div>
+                     <div>
+                        <label class="form-label">Telefone</label>
+                        <div class="input-group">
+                           <span class="input-group-text px-6" id="basic-addon1">
+                              <i class="ti ti-phone fs-6"></i> </span>
+                           <input type="text" class="form-control ps-2" name="telefone"
+                              value="{{setValue old.telefone aluno.telefone}}"
+                              placeholder="Informe o telefone. Exemplo: (69) 99200-0102">
+                        </div>
+                        {{#each (error-messages errors 'telefone')}}
+                        <p class="text-danger" style="margin: 0; padding: 0;"><small>{{this}}</small></p>
+                        {{/each}}
+                     </div>
+                  </div>
+                  <div class="col-lg-6">
+                     <div class="mb-4">
+                        <label class="form-label">CPF</label>
+                        <div class="input-group">
+                           <span class="input-group-text px-6" id="basic-addon1">
+                              <i class="ti ti-id fs-6"></i> </span>
+                           <input type="text" class="form-control ps-2" name="cpf"
+                              value="{{setValue old.cpf aluno.cpf}}"
+                              placeholder="Informe o CPF. Exemplo: 123.456.789-01">
+                        </div>
+                        {{#each (error-messages errors 'cpf')}}
+                        <p class="text-danger" style="margin: 0; padding: 0;"><small>{{this}}</small></p>
+                        {{/each}}
+                     </div>
+                     <div>
+                        <label class="form-label">E-mail</label>
+                        <div class="input-group">
+                           <span class="input-group-text px-6" id="basic-addon1">
+                              <i class="ti ti-mail fs-6"></i> </span>
+                           <input type="email" class="form-control ps-2" name="email"
+                              value="{{setValue old.email aluno.email}}"
+                              placeholder="Informe o e-mail. Exemplo: joao@gmail.com">
+                        </div>
+                        {{#each (error-messages errors 'email')}}
+                        <p class="text-danger" style="margin: 0; padding: 0;"><small>{{this}}</small></p>
+                        {{/each}}
+                     </div>
+                  </div>
+               </div>
+               <div class="row">
+                  <div class="col-lg-6">
+                     <div class="mb-4">
+                        <label class="form-label">Data de Nascimento</label>
+                        <div class="input-group">
+                           <span class="input-group-text px-6" id="basic-addon1">
+                              <i class="ti ti-calendar fs-6"></i> </span>
+                           <input type="date" class="form-control ps-2" name="dataNascimento"
+                              value="{{setValue old.dataNascimento aluno.dataNascimento}}">
+                        </div>
+                        {{#each (error-messages errors 'dataNascimento')}}
+                        <p class="text-danger" style="margin: 0; padding: 0;"><small>{{this}}</small></p>
+                        {{/each}}
+                     </div>
+                  </div>
+               </div>
+            </div>
+            <div class="card-body p-4">
+               <div class="row">
+                  <div class="col-12">
+                     <div class="d-flex align-items-center gap-3">
+                        <button type="submit" class="btn btn-primary">Salvar</button>
+                        <button type="button" class="btn bg-danger-subtle text-danger">Cancelar</button>
+                     </div>
+                  </div>
+               </div>
+            </div>
+         </div>
+      </form>
+   </div>
+</div>
+{{/inline}}
+{{/main}}
